@@ -8,17 +8,17 @@ rolls = randi(6,5,1)
 
 %checks if a certain number of elements are identical
 function out = isNumSame(rolls, numAreSame)
-  out = 0;
+  out = false;
   for i = 1:6
     if(sum(rolls == i) == numAreSame)
-      out = i;
+      out = true;
       break
     endif
   endfor
 endfunction
 
 %checks if an element num exists
-function out = searchRolls(rolls,num)
+function out = isElem(rolls,num)
   out =false;
   for i=1:size(rolls,1)
     if(rolls(i,1) == num)
@@ -40,7 +40,7 @@ endfunction
 %scores 3 of a kind and 4 of a kind
 function out = scoreNumSame(rolls,num)
   out = 0;
-  if(isNumSame(rolls,num)!=0)
+  if(isNumSame(rolls,num))
     out = sum(rolls);
   endif
 endfunction
@@ -48,7 +48,7 @@ endfunction
 %scores full house, a Yahtzee does not count
 function out = scoreFullHouse(rolls)
   out = 0;
-  if(isNumSame(rolls,2)!=0 && isNumSame(rolls,3)!=0)
+  if(isNumSame(rolls,2) && isNumSame(rolls,3))
     out = 25;
   endif
 endfunction
@@ -57,14 +57,14 @@ endfunction
 function out = scoreStraight(rolls,length)
   out = 0;
   if(length == 4)
-    if(searchRolls(rolls,3) && searchRolls(rolls,4))
-      fiveExists = searchRolls(rolls,5);
-      twoExists = searchRolls(rolls,2);
+    if(isElem(rolls,3) && isElem(rolls,4))
+      fiveExists = isElem(rolls,5);
+      twoExists = isElem(rolls,2);
       if(xor(fiveExists,twoExists))
-        if(fiveExists && searchRolls(rolls,6))
+        if(fiveExists && isElem(rolls,6))
           out = 30;
         endif
-        if(twoExists&& searchRolls(rolls,1))
+        if(twoExists&& isElem(rolls,1))
           out = 30;
         endif
       endif
@@ -74,8 +74,8 @@ function out = scoreStraight(rolls,length)
     endif
   endif
   if(length == 5)
-    if(searchRolls(rolls,2) && searchRolls(rolls,3) && searchRolls(rolls,4) && searchRolls(rolls,5))
-      if(searchRolls(rolls,1) || searchRolls(rolls,6))
+    if(isElem(rolls,2) && isElem(rolls,3) && isElem(rolls,4) && isElem(rolls,5))
+      if(isElem(rolls,1) || isElem(rolls,6))
         out = 40;
       endif
     endif
@@ -85,7 +85,7 @@ endfunction
 %scores yahtzee
 function out = scoreYahtzee(rolls)
   out = 0;
-  if(isNumSame(rolls,5) != 0)
+  if(isNumSame(rolls,5))
     out = 50;
   endif
 endfunction
