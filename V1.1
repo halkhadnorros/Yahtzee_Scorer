@@ -52,28 +52,20 @@ endfunction
 %scores large and small straights based on length given
 function out = scoreStraight(rolls,length)
   out = 0;
-  if(length == 4)
-    if(isElem(rolls,3) && isElem(rolls,4))
-      fiveExists = isElem(rolls,5);
-      twoExists = isElem(rolls,2);
-      if(xor(fiveExists,twoExists))
-        if(fiveExists && isElem(rolls,6))
-          out = 30;
-        endif
-        if(twoExists&& isElem(rolls,1))
-          out = 30;
-        endif
-      endif
-      if(fiveExists && twoExists)
+  for i =1:3
+    for j = i:i+3
+      if(!isElem(rolls,j))
+        break
+      elseif(j == i+3)
         out = 30;
       endif
-    endif
-  endif
+    endfor
+  endfor
+
   if(length == 5)
-    if(isElem(rolls,2) && isElem(rolls,3) && isElem(rolls,4) && isElem(rolls,5))
-      if(isElem(rolls,1) || isElem(rolls,6))
-        out = 40;
-      endif
+    if(isElem(rolls,2) && isElem(rolls,3) && isElem(rolls,4) && 
+    isElem(rolls,5) && (isElem(rolls,1) || isElem(rolls,6)))
+      out = 40;
     endif
   endif
 endfunction
