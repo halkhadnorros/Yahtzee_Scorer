@@ -5,6 +5,7 @@
 
 %generates random set of 5 dice rolls
 rolls = randi(6,5,1)
+catagoryApplies(rolls)
 
 %checks if a certain number of elements are identical
 function out = isNumSame(rolls, numAreSame)
@@ -19,12 +20,7 @@ endfunction
 
 %checks if an element num exists
 function out = isElem(rolls,num)
-  out =false;
-  for i=1:size(rolls,1)
-    if(rolls(i,1) == num)
-      out = true;
-    endif
-  endfor
+    out = any(rolls==num);
 endfunction
 
 %scores upper section
