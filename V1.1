@@ -1,0 +1,95 @@
+%make an algorithm that looks at the rolls on a yahtzee board and tells you the 
+%next best move
+%evaluate a dice roll and decide about rerolling
+%2,2,2,4,6
+
+rolls = randi(6,5,1)
+
+function out = isNumSame(rolls, numAreSame)
+  out = 0;
+  for i = 1:6
+    if(sum(rolls == i) == numAreSame)
+      out = i;
+      break
+    endif
+  endfor
+endfunction
+
+function out = searchRolls(rolls,num)
+  out =0;
+  for i=1:size(rolls,1)
+    if(rolls(i,1) == num)
+      out = 1;
+    endif
+  endfor
+endfunction
+
+function out = scoreSingles(rolls,num)
+  out = num*sum(rolls == num);
+endfunction
+
+function out = scoreChance(rolls)
+  out = sum(rolls);
+endfunction
+
+function out = scoreNumSame(rolls,num)
+  out = 0;
+  if(isNumSame(rolls,num)!=0)
+    out = sum(rolls);
+  endif
+endfunction
+
+function out = scoreFullHouse(rolls)
+  out = 0;
+  if(isNumSame(rolls,2)!=0 && isNumSame(rolls,3)!=0)
+    out = 25;
+  endif
+endfunction
+
+function out = scoreStraight(rolls,length)
+  out = 0;
+  if(length == 4)
+    if(searchRolls(rolls,3)+searchRolls(rolls,4)==2)
+      five = searchRolls(rolls,5);
+      two = searchRolls(rolls,2);
+      if(five+two == 1)
+        if(five == 1 && searchRolls(rolls,6) == 1)
+          out = 30;
+        endif
+        if(two == 1 && searchRolls(rolls,1) == 1)
+          out = 30;
+        endif
+      endif
+      if(five+two == 2)
+        out = 30;
+      endif
+    endif
+  endif
+  if(length == 5)
+    if(searchRolls(rolls,2)+searchRolls(rolls,3)+searchRolls(rolls,4)+searchRolls(rolls,5) == 4)
+      if(searchRolls(rolls,1) + searchRolls(rolls,6) == 1)
+        out = 40;
+      endif
+    endif
+  endif
+endfunction
+
+function out = scoreYahtzee(rolls)
+  out = 0;
+  if(isNumSame(rolls,5) != 0)
+    out = 50;
+  endif
+endfunction
+
+function out = catagoryApplies(rolls)
+  for i  = 1:6
+    scoreSingles(rolls,i)
+  endfor
+  scoreChance(rolls)
+  scoreNumSame(rolls,3)
+  scoreNumSame(rolls,4)
+  scoreFullHouse(rolls)
+  scoreStraight(rolls,4)
+  scoreStraight(rolls,5)
+  scoreYahtzee(rolls)
+endfunction
